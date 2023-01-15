@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="barStyle.css" />
+    <script src="app.js" type="module" defer></script>
+    <script src="healthBar.js" type="module" defer></script>
+    <title>Save The Universe</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="status-bar-container"></div>
+      <div class="sub-container">
+        <div class="box player-box"></div>
+        <div class="box alien-box">
+          <div id="save-the-universe">
+            <h1 id="save-the-universe-title">SAVE THE UNIVERSE!</h1>
+
+            <p class="about" id="text"></p>
+          </div>
+        </div>
+      </div>
+      <div class="game-contents">
+        <div class="form player-box-form">
+          <form action="">
+            <div id="select-your-ship">
+              <h3 class="ship-select-header">Select Your Ship Name</h3>
+              <input
+                id="shipName"
+                type="text"
+                placeholder="Enter Ship Name"
+                maxlength="15"
+              />
+              <input type="button" id="start-game" value="Start Game" />
+              <span class="specsBtn">Specifications</span>
+              <div id="test-div"></div>
+            </div>
+          </form>
+        </div>
+        <div class="form alien-box-form">
+          <form action="">
+            <h3>Galactic Crusher</h3>
+            <div class="text"></div>
+            <div id="alien-hull">
+              Hull: <span id="alien-hull-value">7 </span>
+            </div>
+            <div id="alien-firepower">
+              Accuracy: <span id="alien-hull-value">12</span>
+            </div>
+            <div id="alien-accuracy">
+              Hull: <span id="alien-accuracy-value">7 </span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
