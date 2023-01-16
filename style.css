@@ -9,21 +9,33 @@
 }
 
 :root {
-  --darkBlue: #062c43;
-  --lightBlue: #5591a9;
+  /* --darkBlue: #062c43; */
+  /* --lightBlue: #5591a9; */
   --burntOrange: #a44322;
   --darkOrange: #85341a;
   --green: #4ac087;
   --darkGreen: #368e63;
   --white: #fff;
   --black: black;
+
+  /***** Light Version *****/
+  --lightGrey: #b9c5d3;
+  --lightBlue: #b3e5fc;
+  --lightYellow: #ffffe5;
+  --lightRed: #ffcccb;
+
+  /***** Dark Version *****/
+  --darkGrey: #1d1f27;
+  --darkBlue: #0077c8;
+  --darkYellow: #fece44;
+  --darkRed: #f44336;
 }
 body {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: var(--lightBlue);
+  background-color: var(--darkBlue);
   transition: 0.5s;
 }
 
@@ -102,6 +114,16 @@ body.game-active {
 #initializing {
   margin-left: 5px;
 }
+
+#player-terminal-prompt {
+  font-weight: 600;
+  color: blue;
+}
+
+#alien-terminal-prompt {
+  font-weight: 600;
+  color: red;
+}
 /*********** END STATUS BAR **************/
 
 .container {
@@ -156,20 +178,20 @@ body.game-active {
   cursor: pointer;
   padding: 10px 20px;
   margin-bottom: 10px;
-  background-color: var(--lightBlue);
+  background-color: var(--darkBlue);
   color: var(--white);
   font-size: 16px;
   border: none;
 }
 
 #start-game {
-  background-color: var(--green);
+  background-color: var(--darkYellow);
   font-weight: 600;
   font-size: 1.2em;
 }
 
 #start-game:hover {
-  background-color: var(--darkGreen);
+  background-color: #dab23a;
 }
 
 #start-game:active {
@@ -409,6 +431,7 @@ body.game-active {
   height: calc(33.33% - 30px);
   display: flex;
   justify-content: space-around;
+  align-items: end;
   margin-right: 0px;
   padding: 0;
   position: relative;
@@ -421,11 +444,17 @@ body.game-active {
   position: absolute;
   padding: 2px;
   left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 18%;
+  /* transform: translateY(-50%); */
+  transform: scaleY(-1);
 }
 
-.alien-health-bar-inner {
+.alien-health-bar-inner-0,
+.alien-health-bar-inner-1,
+.alien-health-bar-inner-2,
+.alien-health-bar-inner-3,
+.alien-health-bar-inner-4,
+.alien-health-bar-inner-5 {
   height: 100%;
   background-image: linear-gradient(rgb(41, 164, 80), red);
 }
@@ -463,7 +492,7 @@ body.game-active {
   font-size: 1.5em;
   padding: 8px;
   border: 4px solid white;
-  background-color: var(--lightBlue);
+  background-color: var(--darkBlue);
 }
 
 #save-the-universe {

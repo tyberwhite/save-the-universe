@@ -17,6 +17,7 @@ import {
 } from "/elements.js";
 import { createNamesList, typingEffect } from "/functions.js";
 import { alienShipNames } from "/ships.js";
+import { printActionToTerminal } from "/terminal.js";
 
 //---------------- END IMPORTS ----------------//
 
@@ -69,40 +70,6 @@ startGameBtn.onclick = function () {
       shipName.value.toUpperCase();
     gameContents.classList.add("specs-active");
     body.classList.add("game-active");
-
-    //---------------- BUTTON CONTROLS ----------------//
-
-    const retreatButton = document.querySelector(".retreatBtn");
-
-    // Add event listener to retreat button
-
-    function enableRetreatButton() {
-      retreatButton.addEventListener("click", function () {
-        console.log(playerShip.talk(retreatList));
-        playerRetreatTyping();
-        playerShip.hull += 1;
-        updatePlayer();
-        console.log("waiting for alien...");
-        setTimeout(alienAttack, 5000);
-      });
-    }
-
-    // Remove event listener from retreat button
-    const removeRetreatButton = function () {
-      retreatButton.addEventListener("click", function () {
-        console.log(playerShip.talk(retreatList));
-        playerRetreatTyping();
-        playerShip.hull += 1;
-        updatePlayer();
-        console.log("waiting for alien...");
-        setTimeout(alienAttack, 5000);
-      });
-    };
-
-    //---------------- END BUTTON CONTROLS ----------------//
-
-    // Enable Player Buttons
-    enableRetreatButton();
 
     //------------ Instantiate Player Ship ------------//
     const playerShip = new PlayerShip();
@@ -179,36 +146,30 @@ startGameBtn.onclick = function () {
       }
     };
 
-    //--------------- Alien Ship Attack Logic ---------------//
-    const alienAttack = () => {
-      console.log("alien is attacking!!!!");
-      if (alienShips[shipIndex].attack()) {
-        playerShip.hull -= alienShips[shipIndex].firepower;
-        updatePlayer();
-        gameLost();
-        removeRetreatButton();
-        createStatusBarElement();
-        statusBarUpdateAlien();
+    //------------- Update Player Health Bar -------------//
+    const innerBar = document.querySelector(".progress-bar-inner");
+    const updatePlayerHealthBar = function () {
+      if (playerShip.hull <= 0) {
+        innerBar.style.width = "0%";
+      } else {
+        const healthBar = Math.floor((playerShip.hull / 20) * 100);
+        console.log(healthBar);
+        innerBar.style.width = healthBar + "%";
+      }
+    };
 
-        // Modify Player's Health Bar
-        const innerBar = document.querySelector(".progress-bar-inner");
+    //--------------- Update Alien Health Bar ---------------//
 
-        const changeHealth = () => {
-          console.log("hull: " + playerShip.hull);
-          if (playerShip.hull <= 0) {
-            innerBar.style.width = "0%";
-          } else {
-            const healthBar = Math.floor((playerShip.hull / 20) * 100);
-            console.log(healthBar);
-            innerBar.style.width = healthBar + "%";
-          }
-        };
-        changeHealth();
-
-        // Set a delay after alien ship attacks
-        setTimeout(() => {
-          clearText();
-        }, 2000);
+    const updateAlienHealthBar = function () {
+      const alienInnerBar = document.querySelector(
+        `.alien-health-bar-inner-${shipIndex}`
+      );
+      if (alienShips[shipIndex].hull <= 0) {
+        alienInnerBar.style.height = "0%";
+      } else {
+        const healthBar = Math.floor((alienShips[shipIndex].hull / 6) * 100);
+        console.log(healthBar);
+        alienInnerBar.style.height = healthBar + "%";
       }
     };
 
@@ -231,18 +192,6 @@ startGameBtn.onclick = function () {
       }
     }
 
-    //--------------- Freeze Player Buttons --------------//
-    const freezeButtons = () => {
-      const buttons = document.querySelectorAll(".btn");
-      buttons.forEach(function (button) {
-        button.disabled = true;
-      });
-      setTimeout(function () {
-        buttons.forEach(function (button) {
-          button.disabled = false;
-        });
-      }, 5000);
-    };
     //---------------- TYPING TEXT EFFECT ----------------//
 
     // Captain Taglines Variables
@@ -250,15 +199,6 @@ startGameBtn.onclick = function () {
     let playerTextSuccess = successList[Math.floor(Math.random() * 10)];
     let playerTextFail = failList[Math.floor(Math.random() * 10)];
     let playerTextRetreat = retreatList[Math.floor(Math.random() * 10)];
-
-    // Status Bar Variables
-    let statusBarTypingIndex = 0;
-    let statusBarAttackIndex = 0;
-    let statusBarFailIndex = 0;
-
-    const attackSuccess = "Attack successful! ";
-    const attackFailed = "Attack failed! ";
-    const retreatResult = "Hull repaired by one point... ";
 
     const playerSuccessTyping = function () {
       if (textIndex < playerTextSuccess.length) {
@@ -280,171 +220,6 @@ startGameBtn.onclick = function () {
       }
     };
 
-    const playerRetreatTyping = function () {
-      if (textIndex < playerTextRetreat.length) {
-        document.getElementById("player-chat").innerHTML +=
-          playerTextRetreat.charAt(textIndex);
-        textIndex++;
-        // Duration in milliseconds
-        setTimeout(playerRetreatTyping, 50);
-      }
-    };
-
-    // Create new element for status bar
-    const createStatusBarElement = function () {
-      const statusBarInner = document.getElementById("status-bar-inner");
-      const newDiv = document.createElement("div");
-      const statusIdentity = document.createElement("span");
-      const newSpan1 = document.createElement("span");
-      const newSpan2 = document.createElement("span");
-
-      newSpan1.setAttribute("id", `status-bar-text-${statusBarIndex}`);
-      newSpan2.setAttribute("id", `status-bar-result-${statusBarIndex}`);
-      newDiv.setAttribute("id", `status-bar-prompt-${statusBarIndex}`);
-
-      statusIdentity.setAttribute("id", "status-identity");
-      statusIdentity.innerHTML = "Player: ";
-
-      statusBarInner.appendChild(newDiv);
-      newDiv.appendChild(statusIdentity);
-      newDiv.appendChild(newSpan1);
-      newDiv.appendChild(newSpan2);
-    };
-
-    // Create new element for status bar
-    let statusBarIndex = 1;
-
-    const createStatusBarElementAlien = function () {
-      const statusBarInner = document.getElementById("status-bar-inner");
-      const newDiv = document.createElement("div");
-      const statusIdentity = document.createElement("span");
-      const newSpan1 = document.createElement("span");
-      const newSpan2 = document.createElement("span");
-
-      newSpan1.setAttribute("id", `status-bar-text-${statusBarIndex}`);
-      newSpan2.setAttribute("id", `status-bar-result-${statusBarIndex}`);
-      newDiv.setAttribute("id", `status-bar-prompt-${statusBarIndex}`);
-
-      statusIdentity.setAttribute("id", "alien-identity");
-      statusIdentity.innerHTML = `${alienShips[shipIndex].name}: `;
-
-      statusBarInner.appendChild(newDiv);
-      newDiv.appendChild(statusIdentity);
-      newDiv.appendChild(newSpan1);
-      newDiv.appendChild(newSpan2);
-    };
-
-    const statusBarUpdateSuccess = function () {
-      const statusReport = `Attacking ${alienShips[shipIndex].name}......  `;
-      if (statusBarTypingIndex < statusReport.length) {
-        document.getElementById(
-          `status-bar-text-${statusBarIndex}`
-        ).innerHTML += statusReport.charAt(statusBarTypingIndex);
-        statusBarTypingIndex++;
-        console.log("statusbar: ", statusBarIndex);
-
-        // Duration in milliseconds
-        setTimeout(statusBarUpdateSuccess, 60);
-      }
-      setTimeout(statusBarAttackResult, 2000);
-    };
-
-    const statusBarUpdateFail = function () {
-      const statusReport = `Attacking ${alienShips[shipIndex].name}......  `;
-      if (statusBarTypingIndex < statusReport.length) {
-        document.getElementById(
-          `status-bar-text-${statusBarIndex}`
-        ).innerHTML += statusReport.charAt(statusBarTypingIndex);
-        statusBarTypingIndex++;
-        // Duration in milliseconds
-        setTimeout(statusBarUpdateFail, 60);
-      }
-      setTimeout(statusBarFailResult, 2000);
-    };
-
-    let statusBarRetreatIndex = 0;
-    let statusBarRetreatIndex2 = 0;
-
-    const statusBarRetreat = function () {
-      const statusReport = `Retreating......  `;
-      if (statusBarRetreatIndex < statusReport.length) {
-        document.getElementById(
-          `status-bar-text-${statusBarIndex}`
-        ).innerHTML += statusReport.charAt(statusBarRetreatIndex);
-        statusBarRetreatIndex++;
-
-        // Duration in milliseconds
-        setTimeout(statusBarRetreat, 60);
-      }
-      setTimeout(statusBarRetreatResult, 2000);
-    };
-
-    const statusBarAttackResult = function () {
-      if (statusBarAttackIndex < attackSuccess.length) {
-        document.getElementById(
-          `status-bar-result-${statusBarIndex}`
-        ).innerHTML += attackSuccess.charAt(statusBarAttackIndex);
-        statusBarAttackIndex++;
-        // Duration in milliseconds
-        setTimeout(statusBarAttackResult, 50);
-      }
-    };
-
-    const statusBarFailResult = function () {
-      if (statusBarFailIndex < attackFailed.length) {
-        document.getElementById(
-          `status-bar-result-${statusBarIndex}`
-        ).innerHTML += attackFailed.charAt(statusBarFailIndex);
-        statusBarFailIndex++;
-        // Duration in milliseconds
-        setTimeout(statusBarFailResult, 50);
-      }
-    };
-
-    const statusBarRetreatResult = function () {
-      if (statusBarRetreatIndex2 < retreatResult.length) {
-        document.getElementById(
-          `status-bar-result-${statusBarIndex}`
-        ).innerHTML += retreatResult.charAt(statusBarRetreatIndex2);
-        statusBarRetreatIndex2++;
-        // Duration in milliseconds
-        setTimeout(statusBarRetreatResult, 50);
-      }
-    };
-
-    //--------------- Alien Attack - Console Message ------------------//
-    let statusBarAlienIndex = 0;
-
-    const statusBarUpdateAlien = function () {
-      const statusReport = `is attacking......  `;
-      if (statusBarAlienIndex < statusReport.length) {
-        document.getElementById(
-          `status-bar-text-${statusBarIndex}`
-        ).innerHTML += statusReport.charAt(statusBarAlienIndex);
-        statusBarAlienIndex++;
-
-        // Duration in milliseconds
-        setTimeout(statusBarUpdateAlien, 60);
-      }
-      setTimeout(statusBarAlienResult, 2000);
-    };
-
-    const alienSuccess = "Direct hit!";
-    const alienMissed = "Attack missed!";
-
-    let statusBarAlienResultIndex = 0;
-
-    const statusBarAlienResult = function () {
-      if (statusBarAlienResultIndex < alienSuccess.length) {
-        document.getElementById(
-          `status-bar-result-${statusBarIndex}`
-        ).innerHTML += alienSuccess.charAt(statusBarAlienResultIndex);
-        statusBarAlienResultIndex++;
-        setTimeout(statusBarAlienResult, 50);
-      }
-      console.log("index dude: ", statusBarIndex);
-    };
-
     //---------------- END TYPING TEXT EFFECT ----------------//
 
     //---------------- CLEAR TYPING EFFECT ---------------------//
@@ -457,75 +232,126 @@ startGameBtn.onclick = function () {
     };
     //---------------- END CLEAR TYPING EFFECT ---------------------//
 
-    //--------------- GAME LOGIC ---------------//
+    /***************************************************************
+                          GAME LOGIC
+    ****************************************************************/
 
-    // Send initializing message
-    // const initializing = document.getElementById("initializing");
-    // setTimeout(function () {
-    //   typingEffect(
-    //     "Initializing launch protocols... All systems at optimal levels. Charging phaser arrays... Targeting alien vessels... Engaging warp drive... ",
-    //     initializing
-    //   );
-    // }, 800);
+    //---------------- Parent Div For Terminal Printing ------//
+    const parentDiv = document.getElementById("status-bar-inner");
 
-    // Link Retreat Button and Console
-    const newRetreatBtn = document.getElementById("retreat-button");
-    newRetreatBtn.addEventListener("click", function () {
-      createStatusBarElement();
-      statusBarRetreat();
-    });
-
-    // Attack button logic
-    document.querySelector(".attackBtn").addEventListener("click", function () {
-      console.log("You are attacking the enemy!");
-      console.log("status index: ", statusBarIndex);
-
-      createStatusBarElement();
-      const attackResult = playerShip.attack();
-
-      if (attackResult) {
-        statusBarUpdateSuccess();
+    //---------------- Alien Attack Logic --------------------//
+    const alienAttack = function () {
+      // Determine Alien Attack Result as Boolean
+      const enemyAttackResult = playerShip.attack();
+      const enemyFirepower = alienShips[shipIndex].firepower;
+      const currentAlien = alienShips[shipIndex].name;
+      if (enemyAttackResult) {
+        const alienAttackStringSuccess = `${currentAlien} is attacking...... Attack successful... ${shipName.value} has taken ${enemyFirepower} points of damage`;
+        printActionToTerminal(
+          alienAttackStringSuccess,
+          "alien",
+          parentDiv,
+          function () {
+            updatePlayer();
+            updatePlayerHealthBar();
+          }
+        );
+        playerShip.hull -= alienShips[shipIndex].firepower;
       } else {
-        statusBarUpdateFail();
+        const alienAttackStringFail = `Alien is attacking...... Attack failed....`;
+        printActionToTerminal(alienAttackStringFail, "alien", parentDiv);
+      }
+    };
+
+    //----------------- Attack button logic -----------------//
+
+    // Add event listener to attack button
+    document.querySelector(".attackBtn").addEventListener("click", function () {
+      // Determine Player Attack Result as Boolean
+      const playerAttackResult = playerShip.attack();
+
+      // Print Player Attack Result To Terminal
+      if (playerAttackResult) {
+        const playerAttackStringSuccess = `You are attacking ${alienShips[shipIndex].name}...... Attack successful...`;
+        printActionToTerminal(
+          playerAttackStringSuccess,
+          "player",
+          parentDiv,
+          function () {
+            // Apply Damage To Current Alien Ship
+            alienShips[shipIndex].hull -= playerShip.firepower;
+
+            // Update Alien Stats
+            updateAlienHull();
+
+            // Update Alien Health Bar
+            updateAlienHealthBar();
+
+            // Check if Alien Ship Defeated and Move to Next Ship
+            nextAlienShip(alienShips[shipIndex]);
+
+            // Check If Game Won
+            gameWon();
+
+            // Initiate Alien Attack
+            alienAttack();
+          }
+        );
+      } else {
+        const playerAttackStringFail = `You are attacking ${alienShips[shipIndex].name}...... Attack failed...`;
+        printActionToTerminal(
+          playerAttackStringFail,
+          "player",
+          parentDiv,
+          function () {
+            alienAttack();
+          }
+        );
       }
 
-      setTimeout(() => {
-        if (attackResult) {
-          alienShips[shipIndex].hull -= playerShip.firepower;
+      // Determine Alien Attack Result as Boolean
+      const enemyAttackResult = playerShip.attack();
 
-          playerSuccessTyping();
+      // Get current alien ship firepower
+      const enemyFirepower = alienShips[shipIndex].firepower;
 
-          updateAlienHull();
-          nextAlienShip(alienShips[shipIndex]);
-          gameWon();
-        } else {
-          playerFailTyping();
-        }
-        freezeButtons();
-        console.log("waiting for alien...");
-
-        setTimeout(createStatusBarElementAlien, 5000);
-        setTimeout(statusBarUpdateAlien, 5100);
-        setTimeout(function () {
-          statusBarIndex++;
-        }, 9000);
-      }, 3000);
-      setTimeout(function () {
-        statusBarIndex++;
-        statusBarTypingIndex = 0;
-        statusBarAttackIndex = 0;
-        statusBarFailIndex = 0;
-        statusBarRetreatIndex = 0;
-        statusBarRetreatIndex2 = 0;
-        statusBarAlienIndex = 0;
-      }, 4000);
+      // Initiate Enemy Attack
+      // alienAttack();
+      // setTimeout(() => {
+      //   if (enemyAttackResult) {
+      //     const alienAttackStringSuccess = `Alien is attacking...... Attack successful... ${shipName.value} has taken ${enemyFirepower} points of damage`;
+      //     printActionToTerminal(
+      //       alienAttackStringSuccess,
+      //       "alien",
+      //       parentDiv,
+      //       function () {
+      //         updatePlayer();
+      //         updatePlayerHealthBar();
+      //       }
+      //     );
+      //     playerShip.hull -= alienShips[shipIndex].firepower;
+      //   } else {
+      //     const alienAttackStringFail = `Alien is attacking...... Attack failed....`;
+      //     printActionToTerminal(alienAttackStringFail, "alien", parentDiv);
+      //   }
+      // }, 4500);
     });
 
-    // Retreat Button Logic
-    // const retreatButtonLogic = document.getElementById("retreatBtn");
-    // retreatButtonLogic.addEventListener("click", statusBarRetreat);
+    //----------------- Retreat button logic -----------------//
+    document
+      .getElementById("retreat-button")
+      .addEventListener("click", function () {
+        console.log("you are retreating!");
+        const retreatMsg =
+          "Enterprise is retreating... Hull repaired by 1 point...";
+        printActionToTerminal(retreatMsg, "player", parentDiv, function () {
+          playerShip.hull++;
+          updatePlayer();
+          alienAttack();
+        });
+      });
 
-    // Quit Button
+    // Add event listener to Quit Button
     document.querySelector(".quitBtn").addEventListener("click", function () {
       gameContents.classList.remove("specs-active");
       body.classList.remove("game-active");

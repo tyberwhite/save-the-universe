@@ -18,11 +18,9 @@ export default class PlayerShip {
   attack() {
     // attack successful
     if (Math.random() < this.accuracy) {
-      console.log("Attack Successful!");
       return true;
     } else {
       // attack failed
-      console.log("Attack Failed!");
       return false;
     }
   }

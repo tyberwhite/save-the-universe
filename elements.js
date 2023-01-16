@@ -28,9 +28,9 @@ export const formLeft = `
  <div class="player-stats"  id="player-accuracy">
   Accuracy: <span id="player-accuracy-value">9</span>
  </div>
- <button class="btn attackBtn">Attack</button>
-          <button class="btn retreatBtn" id="retreat-button">Retreat</button>
-          <button class="btn quitBtn">Quit</button>
+ <button class="btn attackBtn player-btn" id="attack-btn">Attack</button>
+ <button class="btn retreatBtn player-btn" id="retreat-button">Retreat</button>
+          <button class="btn quitBtn player-btn">Quit</button>
           
           <div id="status"><span id="status-text">CAPTAIN:</span> <span id="player-chat"></span></div>
 `;
@@ -39,7 +39,7 @@ export const formLeft = `
 export const formRight = `<div class="alien-ships-container">
 <div class="alien-box">
   <div class="alien-health-bar">
-    <div class="alien-health-bar-inner"></div>
+    <div class="alien-health-bar-inner-0"></div>
   </div>
   <div class="alien-ship-content alien-ship-0">
     <h3>Invader</h3>
@@ -50,7 +50,7 @@ export const formRight = `<div class="alien-ships-container">
 </div>
 <div class="alien-box">
   <div class="alien-health-bar">
-    <div class="alien-health-bar-inner"></div>
+    <div class="alien-health-bar-inner-1"></div>
   </div>
   <div class="alien-ship-content alien-ship-1">
     <h3>Invader</h3>
@@ -61,7 +61,7 @@ export const formRight = `<div class="alien-ships-container">
 </div>
 <div class="alien-box">
   <div class="alien-health-bar">
-    <div class="alien-health-bar-inner"></div>
+    <div class="alien-health-bar-inner-2"></div>
   </div>
   <div class="alien-ship-content alien-ship-2">
     <h3>Invader</h3>
@@ -72,7 +72,7 @@ export const formRight = `<div class="alien-ships-container">
 </div>
 <div class="alien-box">
   <div class="alien-health-bar">
-    <div class="alien-health-bar-inner"></div>
+    <div class="alien-health-bar-inner-3"></div>
   </div>
   <div class="alien-ship-content alien-ship-3">
     <h3>Invader</h3>
@@ -83,7 +83,7 @@ export const formRight = `<div class="alien-ships-container">
 </div>
 <div class="alien-box">
   <div class="alien-health-bar">
-    <div class="alien-health-bar-inner"></div>
+    <div class="alien-health-bar-inner-4"></div>
   </div>
   <div class="alien-ship-content alien-ship-4">
     <h3>Invader</h3>
@@ -94,7 +94,7 @@ export const formRight = `<div class="alien-ships-container">
 </div>
 <div class="alien-box">
   <div class="alien-health-bar">
-    <div class="alien-health-bar-inner"></div>
+    <div class="alien-health-bar-inner-5"></div>
   </div>
   <div class="alien-ship-content alien-ship-5">
     <h3>Invader</h3>
