@@ -11,8 +11,9 @@
 :root {
   /* --darkBlue: #062c43; */
   /* --lightBlue: #5591a9; */
-  --burntOrange: #a44322;
-  --darkOrange: #85341a;
+  /* --burntOrange: #a44322; */
+  --burntOrange: #28bccf;
+  --darkOrange: #31e1f7;
   --green: #4ac087;
   --darkGreen: #368e63;
   --white: #fff;
@@ -26,8 +27,8 @@
 
   /***** Dark Version *****/
   --darkGrey: #1d1f27;
-  --darkBlue: #0077c8;
-  --darkYellow: #fece44;
+  --darkBlue: #16213e;
+  --darkYellow: #533483;
   --darkRed: #f44336;
 }
 body {
@@ -66,7 +67,7 @@ body.game-active {
   margin-bottom: 30px;
   width: 800px;
   height: 85px;
-  background-color: black;
+  background-color: #0f3460;
   border: 1px solid white;
   color: var(--white);
   overflow: hidden;
@@ -77,7 +78,6 @@ body.game-active {
   flex-direction: column;
   align-items: start;
   width: 100%;
-  background-color: black;
   color: var(--white);
 }
 
@@ -191,7 +191,7 @@ body.game-active {
 }
 
 #start-game:hover {
-  background-color: #dab23a;
+  background-color: #321e50;
 }
 
 #start-game:active {
@@ -205,7 +205,7 @@ body.game-active {
   cursor: pointer;
   padding: 10px 20px;
   margin-top: 10px;
-  background-color: var(--white);
+  background-color: var(--darkOrange);
   color: var(--black);
   font-size: 16px;
   border: none;

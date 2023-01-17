@@ -18,6 +18,7 @@ import {
 import { createNamesList, typingEffect } from "/functions.js";
 import { alienShipNames } from "/ships.js";
 import { printActionToTerminal } from "/terminal.js";
+import { quitList } from "/taglines.js";
 
 //---------------- END IMPORTS ----------------//
 
@@ -113,22 +114,35 @@ startGameBtn.onclick = function () {
     }
 
     //-------------- Select Current Alien Ship --------------//
-    let shipIndex = 0;
+    let shipIndex = 5;
+
+    //------------ Check If Game Lost ------------//
+    function gameLost() {
+      if (playerShip.hull <= 0) {
+        console.log("You lost!!!");
+        setTimeout(() => {
+          location.reload();
+        }, 5000);
+      }
+    }
 
     //------------ Style Current Alien Ship ------------//
     const styleAlienShip = () => {
-      const previousShipName = document.querySelector(
-        `.alien-ship-${shipIndex - 1} h3`
-      );
-      const currentShipName = document.querySelector(
-        `.alien-ship-${shipIndex} h3`
-      );
-      if (shipIndex > 0) {
-        previousShipName.classList.remove("alien-active");
-        previousShipName.classList.add("alien-dead");
+      if (shipIndex < 6) {
+        const previousShipName = document.querySelector(
+          `.alien-ship-${shipIndex - 1} h3`
+        );
+        const currentShipName = document.querySelector(
+          `.alien-ship-${shipIndex} h3`
+        );
+        if (shipIndex > 0 && shipIndex < 6) {
+          previousShipName.classList.remove("alien-active");
+          previousShipName.classList.add("alien-dead");
+        }
+        currentShipName.classList.add("alien-active");
       }
-      currentShipName.classList.add("alien-active");
     };
+
     styleAlienShip();
 
     //------------ Update Alien Ship Hull Points ------------//
@@ -173,64 +187,25 @@ startGameBtn.onclick = function () {
       }
     };
 
-    //------------ Check If Game Won ------------//
-    const gameWon = () => {
-      if (shipIndex > 5) {
-        setTimeout(() => {
-          location.reload();
-        }, 5000);
-      }
-    };
+    //---------------- CAPTAIN TYPING TEXT EFFECT ----------------//
 
-    //------------ Check If Game Lost ------------//
-    function gameLost() {
-      if (playerShip.hull <= 0) {
-        console.log("You lost!!!");
-        setTimeout(() => {
-          location.reload();
-        }, 5000);
-      }
-    }
-
-    //---------------- TYPING TEXT EFFECT ----------------//
-
-    // Captain Taglines Variables
-    let textIndex = 0;
-    let playerTextSuccess = successList[Math.floor(Math.random() * 10)];
-    let playerTextFail = failList[Math.floor(Math.random() * 10)];
-    let playerTextRetreat = retreatList[Math.floor(Math.random() * 10)];
-
-    const playerSuccessTyping = function () {
-      if (textIndex < playerTextSuccess.length) {
-        document.getElementById("player-chat").innerHTML +=
-          playerTextSuccess.charAt(textIndex);
-        textIndex++;
-        // Duration in milliseconds
-        setTimeout(playerSuccessTyping, 50);
-      }
-    };
-
-    const playerFailTyping = function () {
-      if (textIndex < playerTextFail.length) {
-        document.getElementById("player-chat").innerHTML +=
-          playerTextFail.charAt(textIndex);
-        textIndex++;
-        // Duration in milliseconds
-        setTimeout(playerFailTyping, 50);
-      }
+    const printString = function (stringsList, callback = () => {}) {
+      // Set innerHTML to an empty string
+      document.getElementById("player-chat").innerHTML = "";
+      let randomString =
+        stringsList[Math.floor(Math.random() * stringsList.length)];
+      let i = 0;
+      let interval = setInterval(() => {
+        document.getElementById("player-chat").innerHTML += randomString[i];
+        i++;
+        if (i === randomString.length) {
+          callback();
+          clearInterval(interval);
+        }
+      }, 50);
     };
 
     //---------------- END TYPING TEXT EFFECT ----------------//
-
-    //---------------- CLEAR TYPING EFFECT ---------------------//
-    const clearText = function () {
-      document.getElementById("player-chat").innerHTML = "";
-      textIndex = 0;
-      playerTextSuccess = successList[Math.floor(Math.random() * 10)];
-      playerTextFail = failList[Math.floor(Math.random() * 10)];
-      playerTextRetreat = retreatList[Math.floor(Math.random() * 10)];
-    };
-    //---------------- END CLEAR TYPING EFFECT ---------------------//
 
     /***************************************************************
                           GAME LOGIC
@@ -241,6 +216,8 @@ startGameBtn.onclick = function () {
 
     //---------------- Alien Attack Logic --------------------//
     const alienAttack = function () {
+      console.log(shipIndex);
+
       // Determine Alien Attack Result as Boolean
       const enemyAttackResult = playerShip.attack();
       const enemyFirepower = alienShips[shipIndex].firepower;
@@ -288,13 +265,18 @@ startGameBtn.onclick = function () {
             updateAlienHealthBar();
 
             // Check if Alien Ship Defeated and Move to Next Ship
-            nextAlienShip(alienShips[shipIndex]);
+            if (alienShips[shipIndex].hull <= 0 && shipIndex >= 5) {
+              console.log("you win");
+              printActionToTerminal("You win...........", "player", parentDiv);
+              return;
+            } else {
+              nextAlienShip(alienShips[shipIndex]);
 
-            // Check If Game Won
-            gameWon();
-
-            // Initiate Alien Attack
-            alienAttack();
+              // Print Tagline & Initiate Alien Attack
+              printString(successList, function () {
+                alienAttack();
+              });
+            }
           }
         );
       } else {
@@ -314,27 +296,6 @@ startGameBtn.onclick = function () {
 
       // Get current alien ship firepower
       const enemyFirepower = alienShips[shipIndex].firepower;
-
-      // Initiate Enemy Attack
-      // alienAttack();
-      // setTimeout(() => {
-      //   if (enemyAttackResult) {
-      //     const alienAttackStringSuccess = `Alien is attacking...... Attack successful... ${shipName.value} has taken ${enemyFirepower} points of damage`;
-      //     printActionToTerminal(
-      //       alienAttackStringSuccess,
-      //       "alien",
-      //       parentDiv,
-      //       function () {
-      //         updatePlayer();
-      //         updatePlayerHealthBar();
-      //       }
-      //     );
-      //     playerShip.hull -= alienShips[shipIndex].firepower;
-      //   } else {
-      //     const alienAttackStringFail = `Alien is attacking...... Attack failed....`;
-      //     printActionToTerminal(alienAttackStringFail, "alien", parentDiv);
-      //   }
-      // }, 4500);
     });
 
     //----------------- Retreat button logic -----------------//
@@ -347,17 +308,27 @@ startGameBtn.onclick = function () {
         printActionToTerminal(retreatMsg, "player", parentDiv, function () {
           playerShip.hull++;
           updatePlayer();
-          alienAttack();
+          // Print Tagline & Initiate Alien Attack
+          printString(retreatList, function () {
+            alienAttack();
+          });
         });
       });
 
     // Add event listener to Quit Button
     document.querySelector(".quitBtn").addEventListener("click", function () {
-      gameContents.classList.remove("specs-active");
-      body.classList.remove("game-active");
-      shipName.value = "";
-      statusBarContainer.innerHTML = "";
-      console.log("You have quit!");
+      printActionToTerminal(
+        "Deactivating Warp Drives... Quitting game............",
+        "player",
+        parentDiv,
+        function () {
+          gameContents.classList.remove("specs-active");
+          body.classList.remove("game-active");
+          shipName.value = "";
+          statusBarContainer.innerHTML = "";
+          console.log("You have quit!");
+        }
+      );
     });
   }
 };

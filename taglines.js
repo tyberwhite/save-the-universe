@@ -40,6 +40,8 @@ export const retreatList = [
   "You aliens won this round, but the war is not over yet",
   "Looks like we need to call for reinforcement, let's retreat and regroup",
 ];
+
+export const quitList = ["Quitting game..."];
 //----------- End Player Taglines -----------//
 
 //------------- Alien Taglines -------------//
