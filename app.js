@@ -268,6 +268,9 @@ startGameBtn.onclick = function () {
             if (alienShips[shipIndex].hull <= 0 && shipIndex >= 5) {
               console.log("you win");
               printActionToTerminal("You win...........", "player", parentDiv);
+              document.querySelectorAll(".quitBtn").forEach(function (button) {
+                button.disabled = false;
+              });
               return;
             } else {
               nextAlienShip(alienShips[shipIndex]);

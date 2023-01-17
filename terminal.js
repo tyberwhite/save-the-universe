@@ -9,6 +9,10 @@ export function printActionToTerminal(
   parentDiv,
   callback = () => {}
 ) {
+  // Disable player buttons
+  document.querySelectorAll(".btn").forEach(function (button) {
+    button.disabled = true;
+  });
   // Create a new div for each action printed to terminal window
   const childDiv = document.createElement("div");
   const span = document.createElement("span");
@@ -21,7 +25,7 @@ export function printActionToTerminal(
     span.id = "player-terminal-prompt";
   } else {
     childDiv.classList.add("alien-terminal-action");
-    span.id = "alien-terminal-prompt";
+    span.id = "player-terminal-prompt";
   }
   childDiv.classList.add("alien-terminal-action");
 
