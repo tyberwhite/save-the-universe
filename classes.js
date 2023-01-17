@@ -1,4 +1,4 @@
-import { successList, failList, retreatList } from "/taglines.js";
+import { successList, failList, retreatList } from "./taglines.js";
 
 /*****************************
           CLASSES
