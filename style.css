@@ -224,6 +224,11 @@ body.game-active {
   transform: translateY(4px);
 }
 
+.btnGlow {
+  color: white;
+  box-shadow: 0px 2px 10px #31e1f7;
+}
+
 .specsBtn {
   text-decoration: underline;
   cursor: pointer;

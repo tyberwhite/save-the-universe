@@ -72,6 +72,23 @@ startGameBtn.onclick = function () {
     gameContents.classList.add("specs-active");
     body.classList.add("game-active");
 
+    // Enable game play buttons
+    const enableGameButtons = function () {
+      document.querySelectorAll(".btn").forEach(function (button) {
+        button.disabled = false;
+      });
+    };
+    // Intro Function
+    const introFunction = function () {
+      printActionToTerminal(
+        "Welcome to Save The Universe! Your mission is to destroy the invading alien ships and protect Earth. Good luck, captain!",
+        "player",
+        document.getElementById("status-bar-inner"),
+        enableGameButtons
+      );
+    };
+    introFunction();
+
     //------------ Instantiate Player Ship ------------//
     const playerShip = new PlayerShip();
 
@@ -115,16 +132,6 @@ startGameBtn.onclick = function () {
 
     //-------------- Select Current Alien Ship --------------//
     let shipIndex = 0;
-
-    //------------ Check If Game Lost ------------//
-    function gameLost() {
-      if (playerShip.hull <= 0) {
-        console.log("You lost!!!");
-        setTimeout(() => {
-          location.reload();
-        }, 5000);
-      }
-    }
 
     //------------ Style Current Alien Ship ------------//
     const styleAlienShip = () => {
