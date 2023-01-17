@@ -5,20 +5,20 @@ import {
   retreatList,
   alienSuccessList,
   alienFailList,
-} from "/taglines.js";
-import { titleText } from "/title-text.js";
-import PlayerShip, { AlienShip } from "/classes.js";
+} from "./taglines.js";
+import { titleText } from "./title-text.js";
+import PlayerShip, { AlienShip } from "./classes.js";
 import {
   statusBar,
   formLeft,
   formRight,
   specsFormLeft,
   specsFormRight,
-} from "/elements.js";
-import { createNamesList, typingEffect } from "/functions.js";
-import { alienShipNames } from "/ships.js";
-import { printActionToTerminal } from "/terminal.js";
-import { quitList } from "/taglines.js";
+} from "./elements.js";
+import { createNamesList, typingEffect } from "./functions.js";
+import { alienShipNames } from "./ships.js";
+import { printActionToTerminal } from "./terminal.js";
+import { quitList } from "./taglines.js";
 
 //---------------- END IMPORTS ----------------//
 
@@ -114,7 +114,7 @@ startGameBtn.onclick = function () {
     }
 
     //-------------- Select Current Alien Ship --------------//
-    let shipIndex = 5;
+    let shipIndex = 0;
 
     //------------ Check If Game Lost ------------//
     function gameLost() {
