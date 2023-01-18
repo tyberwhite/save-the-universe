@@ -7,9 +7,9 @@ import { successList, failList, retreatList } from "./taglines.js";
 // -------- Player Ship -------- //
 export default class PlayerShip {
   constructor() {
-    this.hull = 50;
-    this.firepower = 50;
-    this.accuracy = 1;
+    this.hull = 20;
+    this.firepower = 5;
+    this.accuracy = 0.7;
     this.taglinesSuccess = successList;
     this.taglinesFail = failList;
     this.taglinesRetreat = retreatList;
