@@ -262,7 +262,17 @@ startGameBtn.onclick = function () {
           function () {
             updatePlayer();
             updatePlayerHealthBar();
-            addButtonGlow();
+            if (playerShip.hull <= 0) {
+              console.log("You lost!");
+              printActionToTerminal(
+                "Your space ship has been destroyed and aliens have invaded Earth! RIP......",
+                "dead",
+                parentDiv
+              );
+              return;
+            } else {
+              addButtonGlow();
+            }
           }
         );
         playerShip.hull -= alienShips[shipIndex].firepower;

@@ -28,8 +28,8 @@ export const formLeft = `
  <div class="player-stats"  id="player-accuracy">
   Accuracy: <span id="player-accuracy-value">9</span>
  </div>
- <button class="btn attackBtn player-btn" id="attack-btn">Attack</button>
- <button class="btn retreatBtn player-btn" id="retreat-button">Retreat</button>
+ <button class="btn attackBtn player-btn action-btn" id="attack-btn">Attack</button>
+ <button class="btn retreatBtn player-btn action-btn" id="retreat-button">Retreat</button>
           <button class="btn quitBtn player-btn">Quit</button>
           
           <div id="status"><span id="status-text">CAPTAIN:</span> <span id="player-chat"></span></div>

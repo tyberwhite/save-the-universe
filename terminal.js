@@ -44,6 +44,10 @@ export function printActionToTerminal(
         document.querySelectorAll(".btn").forEach(function (button) {
           button.disabled = false;
         });
+      } else if (playerName === "dead") {
+        document.querySelectorAll(".action-btn").forEach(function (button) {
+          button.disabled = true;
+        });
       }
     }
   }, 70);
