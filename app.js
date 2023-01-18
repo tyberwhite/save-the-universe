@@ -185,7 +185,24 @@ startGameBtn.onclick = function () {
 
     //------------ Select Next Alien If Defeated ------------//
     const nextAlienShip = (currentShip) => {
-      if (currentShip.hull <= 0) {
+      // Check if game has been won, if so display win message and reload app
+      if (alienShips[shipIndex].hull <= 0 && shipIndex >= 5) {
+        const currentShipName = document.querySelector(
+          `.alien-ship-${shipIndex} h3`
+        );
+        currentShipName.classList.remove("alien-active");
+        currentShipName.classList.add("alien-dead");
+        console.log("you win");
+        printActionToTerminal(
+          "Congratulations! You terminated all alien ships and saved humanity. Live long and prosper....................",
+          "player",
+          parentDiv,
+          function () {
+            location.reload();
+            return;
+          }
+        );
+      } else if (currentShip.hull <= 0) {
         shipIndex++;
         styleAlienShip();
       }
@@ -317,27 +334,26 @@ startGameBtn.onclick = function () {
             updateAlienHealthBar();
 
             // Check if Alien Ship Defeated and Move to Next Ship
-            if (alienShips[shipIndex].hull <= 0 && shipIndex >= 5) {
-              currentShipName.classList.remove("alien-active");
-              currentShipName.classList.add("alien-dead");
-              console.log("you win");
-              printActionToTerminal(
-                "Congratulations! You terminated all alien ships and saved humanity!",
-                "player",
-                parentDiv
-              );
-              document.querySelectorAll(".quitBtn").forEach(function (button) {
-                button.disabled = false;
-              });
-              return;
-            } else {
-              nextAlienShip(alienShips[shipIndex]);
+            // if (alienShips[shipIndex].hull <= 0 && shipIndex >= 5) {
+            //   currentShipName.classList.remove("alien-active");
+            //   currentShipName.classList.add("alien-dead");
+            //   console.log("you win");
+            //   printActionToTerminal(
+            //     "Congratulations! You terminated all alien ships and saved humanity!",
+            //     "player",
+            //     parentDiv
+            //   );
+            //   document.querySelector(".quitBtn").button.disabled = false;
+            //   return;
 
-              // Print Tagline & Initiate Alien Attack
-              printString(successList, function () {
+            nextAlienShip(alienShips[shipIndex]);
+
+            // Print Tagline & Initiate Alien Attack
+            printString(successList, function () {
+              if (shipIndex <= 5 && alienShips[shipIndex].hull > 0) {
                 alienAttack();
-              });
-            }
+              }
+            });
           }
         );
       } else {
