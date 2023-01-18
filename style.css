@@ -28,7 +28,7 @@
   /***** Dark Version *****/
   --darkGrey: #1d1f27;
   --darkBlue: #16213e;
-  --darkYellow: #533483;
+  --darkYellow: #31e1f7;
   --darkRed: #f44336;
 }
 body {
@@ -108,7 +108,7 @@ body.game-active {
 #status-bar-text-1,
 #status-bar-result-1 {
   font-weight: 300;
-  color: var(--white);
+  color: white;
 }
 
 #initializing {
@@ -117,12 +117,12 @@ body.game-active {
 
 #player-terminal-prompt {
   font-weight: 600;
-  color: blue;
+  color: red;
 }
 
 #alien-terminal-prompt {
   font-weight: 600;
-  color: red;
+  color: green;
 }
 /*********** END STATUS BAR **************/
 
@@ -191,7 +191,7 @@ body.game-active {
 }
 
 #start-game:hover {
-  background-color: #321e50;
+  background-color: #29c4d8;
 }
 
 #start-game:active {
@@ -206,7 +206,7 @@ body.game-active {
   padding: 10px 20px;
   margin-top: 10px;
   background-color: var(--darkOrange);
-  color: var(--black);
+  color: #fff;
   font-size: 16px;
   border: none;
 }

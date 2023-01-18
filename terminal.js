@@ -25,7 +25,7 @@ export function printActionToTerminal(
     span.id = "player-terminal-prompt";
   } else {
     childDiv.classList.add("alien-terminal-action");
-    span.id = "player-terminal-prompt";
+    span.id = "alien-terminal-prompt";
   }
   childDiv.classList.add("alien-terminal-action");
 

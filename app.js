@@ -55,6 +55,21 @@ specsBtn.onclick = function () {
 
 //------------------- END INITIAL TEXT -------------------//
 
+//------------------- CONTROL BUTTON GLOW -------------------//
+
+const addButtonGlow = function () {
+  const btnSelector = document.querySelectorAll(".btn");
+  btnSelector.forEach(function (button) {
+    button.classList.add("btnGlow");
+  });
+};
+
+const removeButtonGlow = function () {
+  const btnSelector = document.querySelectorAll(".btn");
+  btnSelector.forEach(function (button) {
+    button.classList.remove("btnGlow");
+  });
+};
 //--------------- MAIN GAME LOGIC ---------------//
 // Start Game
 startGameBtn.onclick = function () {
@@ -84,7 +99,10 @@ startGameBtn.onclick = function () {
         "Welcome to Save The Universe! Your mission is to destroy the invading alien ships and protect Earth. Good luck, captain!",
         "player",
         document.getElementById("status-bar-inner"),
-        enableGameButtons
+        function () {
+          enableGameButtons();
+          addButtonGlow();
+        }
       );
     };
     introFunction();
@@ -154,9 +172,15 @@ startGameBtn.onclick = function () {
 
     //------------ Update Alien Ship Hull Points ------------//
     const updateAlienHull = () => {
-      document.querySelector(
+      const alienHullSelector = document.querySelector(
         `.alien-ship-${shipIndex} .alien-hull-value`
-      ).innerHTML = "Hull: " + String(alienShips[shipIndex].hull);
+      );
+      if (alienShips[shipIndex].hull <= 0) {
+        alienHullSelector.innerHTML = "Hull: 0";
+      } else {
+        alienHullSelector.innerHTML =
+          "Hull: " + String(alienShips[shipIndex].hull);
+      }
     };
 
     //------------ Select Next Alien If Defeated ------------//
@@ -238,12 +262,20 @@ startGameBtn.onclick = function () {
           function () {
             updatePlayer();
             updatePlayerHealthBar();
+            addButtonGlow();
           }
         );
         playerShip.hull -= alienShips[shipIndex].firepower;
       } else {
         const alienAttackStringFail = `Alien is attacking...... Attack failed....`;
-        printActionToTerminal(alienAttackStringFail, "alien", parentDiv);
+        printActionToTerminal(
+          alienAttackStringFail,
+          "alien",
+          parentDiv,
+          function () {
+            addButtonGlow();
+          }
+        );
       }
     };
 
@@ -251,6 +283,9 @@ startGameBtn.onclick = function () {
 
     // Add event listener to attack button
     document.querySelector(".attackBtn").addEventListener("click", function () {
+      // Remove Button Glow
+      removeButtonGlow();
+
       // Determine Player Attack Result as Boolean
       const playerAttackResult = playerShip.attack();
 
@@ -273,8 +308,14 @@ startGameBtn.onclick = function () {
 
             // Check if Alien Ship Defeated and Move to Next Ship
             if (alienShips[shipIndex].hull <= 0 && shipIndex >= 5) {
+              currentShipName.classList.remove("alien-active");
+              currentShipName.classList.add("alien-dead");
               console.log("you win");
-              printActionToTerminal("You win...........", "player", parentDiv);
+              printActionToTerminal(
+                "Congratulations! You terminated all alien ships and saved humanity!",
+                "player",
+                parentDiv
+              );
               document.querySelectorAll(".quitBtn").forEach(function (button) {
                 button.disabled = false;
               });

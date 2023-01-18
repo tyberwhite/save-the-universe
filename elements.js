@@ -28,9 +28,9 @@ export const formLeft = `
  <div class="player-stats"  id="player-accuracy">
   Accuracy: <span id="player-accuracy-value">9</span>
  </div>
- <button class="btn attackBtn player-btn btnGlow" id="attack-btn">Attack</button>
- <button class="btn retreatBtn player-btn btnGlow" id="retreat-button">Retreat</button>
-          <button class="btn quitBtn player-btn btnGlow">Quit</button>
+ <button class="btn attackBtn player-btn" id="attack-btn">Attack</button>
+ <button class="btn retreatBtn player-btn" id="retreat-button">Retreat</button>
+          <button class="btn quitBtn player-btn">Quit</button>
           
           <div id="status"><span id="status-text">CAPTAIN:</span> <span id="player-chat"></span></div>
 `;
